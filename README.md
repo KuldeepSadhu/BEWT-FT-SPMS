@@ -1,16 +1,78 @@
-# React + Vite
+# Student Project Management System (SPMS)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A professional, role-based college project management system built with **React**, **React Router v6**, and **Tailwind CSS**. This system is designed to streamline the coordination between students, faculty mentors, and administrators.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Key Features
 
-## React Compiler
+### 🔐 Multi-Role Access Control
+*   **Admin**: System configuration, global project oversight, and user management.
+*   **Faculty**: Mentorship tools, group tracking, and evaluation management.
+*   **Student**: Project progress tracking, submission portals, and team collaboration.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🏗️ Advanced Architecture
+*   **Layout System**: Uses nested routing with specific layouts (`AdminLayout`, `FacultyLayout`, `StudentLayout`) to maintain a clean and consistent UI.
+*   **Protected Routes**: A centralized authentication guard checks user roles before permitting access to sensitive areas.
+*   **Simulated Auth**: A local-storage based authentication simulation—perfect for rapid development and testing without a backend.
+*   **Responsive UI**: Built with a "mobile-first" approach using Tailwind CSS.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+*   **Frontend**: React 19
+*   **Routing**: React Router 7 (v6 API)
+*   **Styling**: Tailwind CSS 4
+*   **Icons**: React Icons (Hi symbols)
+*   **Bundler**: Vite
+
+---
+
+## 📂 Project Structure
+
+```text
+src/
+├── auth/           # Login and Auth simulation
+├── components/     # Shared UI (Navbar, Footer, ProtectedRoute)
+├── layouts/        # Role-specific UI wrappers
+├── pages/          # Feature pages grouped by role
+│   ├── Admin/      # Analytics and Project Lists
+│   ├── Faculty/    # Group records and Mentorship tools
+│   └── Student/    # Project workspace and Submissions
+├── App.jsx         # Centralized Routing Logic
+└── main.jsx        # App Entry & Global Styling
+```
+
+---
+
+## 🏁 Getting Started
+
+### 1. Installation
+Clone the repository and install dependencies:
+```bash
+npm install
+```
+
+### 2. Run Development Server
+```bash
+npm run dev
+```
+
+### 3. Usage (Dev Mode)
+*   Navigate to the homepage.
+*   Select a role (Admin, Faculty, or Student) to simulate a login.
+*   The system will automatically redirect you to the correct dashboard and assign the appropriate permissions.
+
+---
+
+## 📝 Roadmap & Expansion
+This project is currently a **Frontend-First** architecture. Future steps include:
+- [ ] Integrating a Real Backend (Node.js/Express or Python).
+- [ ] Database setup (PostgreSQL/MongoDB).
+- [ ] JWT-based Authentication.
+- [ ] Real-time notifications for meeting schedules.
+- [ ] Automated grading and report generation.
+
+---
+
+Built with ❤️ for better project management.

@@ -16,7 +16,7 @@ const MyProject = () => {
         </section>
         <section>
           <h3 className="text-lg font-bold border-b pb-2">Submission Area</h3>
-          <div className="mt-4 p-4 bord er-2 border-dashed border-gray-300 text-center rounded bg-gray-50">
+          <div className="mt-4 p-4 border-2 border-dashed border-gray-300 text-center rounded bg-gray-50">
             <p className="text-gray-500">Drag and drop your project report (PDF) here</p>
             <button className="mt-2 bg-blue-600 text-white px-4 py-1 rounded">Upload File</button>
           </div>
