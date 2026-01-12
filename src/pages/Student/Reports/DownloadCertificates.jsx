@@ -1,11 +1,22 @@
 import React from "react";
+import { FiAward, FiLock } from "react-icons/fi";
 
 const DownloadCertificates = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Download Certificates</h2>
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
-        <p className="text-gray-600 dark:text-gray-400">Certificate download functionality coming soon...</p>
+      
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 text-center">
+         <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400 dark:text-gray-500">
+           <FiLock size={40} />
+         </div>
+         <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">Certificates Locked</h3>
+         <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-6">
+           Course completion certificates will be available for download only after the final project evaluation and grading is completed by the university.
+         </p>
+         <button className="bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300 px-6 py-2 rounded-lg font-semibold cursor-not-allowed" disabled>
+           Download Certificate
+         </button>
       </div>
     </div>
   );

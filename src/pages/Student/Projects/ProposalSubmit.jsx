@@ -1,11 +1,47 @@
 import React from "react";
+import { FiUploadCloud } from "react-icons/fi";
 
 const ProposalSubmit = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Submit Proposal</h2>
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
-        <p className="text-gray-600 dark:text-gray-400">Proposal submission form coming soon...</p>
+      
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 max-w-2xl mx-auto">
+        <form className="space-y-6">
+           <div>
+             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Project Title</label>
+             <input type="text" className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500" placeholder="Enter project title" />
+           </div>
+
+           <div>
+             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Domain</label>
+             <select className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                <option>Select Domain</option>
+                <option>Web Development</option>
+                <option>Machine Learning</option>
+                <option>IoT</option>
+                <option>Blockchain</option>
+             </select>
+           </div>
+
+           <div>
+             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Problem Statement</label>
+             <textarea rows="4" className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500" placeholder="Describe the problem you are solving..."></textarea>
+           </div>
+
+           <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload Proposal Document (PDF)</label>
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                 <FiUploadCloud size={40} className="text-gray-400 mb-3" />
+                 <p className="text-gray-600 dark:text-gray-400 font-medium">Click to upload or drag and drop</p>
+                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">PDF, DOC up to 5MB</p>
+              </div>
+           </div>
+
+           <button type="button" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors shadow-lg">
+             Submit Proposal
+           </button>
+        </form>
       </div>
     </div>
   );
