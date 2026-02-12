@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { 
-  FiHome, 
-  FiUsers, 
-  FiFolder, 
-  FiSettings, 
-  FiLogOut, 
-  FiMenu, 
+import {
+  FiHome,
+  FiUsers,
+  FiFolder,
+  FiSettings,
+  FiLogOut,
+  FiMenu,
   FiX,
   FiCalendar,
   FiFileText,
-  FiBarChart
+  FiBarChart,
 } from "react-icons/fi";
-import { clearUserRole } from "../../utils/auth";
+import { logout } from "../../utils/auth";
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const AdminNavbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = () => {
-    clearUserRole();
+    logout();
     navigate("/login");
   };
 
@@ -29,17 +29,34 @@ const AdminNavbar = () => {
     { icon: FiUsers, label: "Student Master", path: "/admin/students/master" },
     { icon: FiFolder, label: "Group Creation", path: "/admin/groups/creation" },
     { icon: FiFolder, label: "Group Approval", path: "/admin/groups/approval" },
-    { icon: FiFolder, label: "Member Mapping", path: "/admin/groups/member-mapping" },
+    {
+      icon: FiFolder,
+      label: "Member Mapping",
+      path: "/admin/groups/member-mapping",
+    },
     { icon: FiFileText, label: "Project List", path: "/admin/projects" },
-    { icon: FiSettings, label: "Project Types", path: "/admin/config/project-types" },
-    { icon: FiSettings, label: "Staff Management", path: "/admin/config/staff" },
-    { icon: FiSettings, label: "Academic Year", path: "/admin/config/academic-year" },
+    {
+      icon: FiSettings,
+      label: "Project Types",
+      path: "/admin/config/project-types",
+    },
+    {
+      icon: FiSettings,
+      label: "Staff Management",
+      path: "/admin/config/staff",
+    },
+    {
+      icon: FiSettings,
+      label: "Academic Year",
+      path: "/admin/config/academic-year",
+    },
   ];
 
   const isActive = (path) => {
     if (location.pathname === path) return true;
     // Check if current path starts with the menu path (for sub-routes)
-    if (path !== "/admin/dashboard" && location.pathname.startsWith(path)) return true;
+    if (path !== "/admin/dashboard" && location.pathname.startsWith(path))
+      return true;
     return false;
   };
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { setUserRole } from "../utils/auth";
+import { register } from "../utils/auth";
 import AuthLayout from "./AuthLayout";
 
 const RegisterPage = ({ role }) => {
@@ -10,51 +10,107 @@ const RegisterPage = ({ role }) => {
     email: "",
     password: "",
     confirmPassword: "",
+    department: "",
+    rollNumber: "", // For student
   });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    // Validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match");
       return;
     }
-    
-    // Simulate registration logic here
-    console.log(`Registering as ${role}`, formData);
-    
-    // Auto login after register
-    if (setUserRole(role)) {
-      navigate(`/${role}/dashboard`);
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
+    if (!formData.department.trim()) {
+      setError("Department is required");
+      return;
+    }
+
+    if (role === "student" && !formData.rollNumber.trim()) {
+      setError("Roll number is required for students");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Prepare data based on role
+      const registrationData = {
+        department: formData.department,
+      };
+
+      if (role === "student") {
+        registrationData.rollNumber = formData.rollNumber;
+      }
+
+      const result = await register(
+        formData.name,
+        formData.email,
+        formData.password,
+        role,
+        registrationData,
+      );
+
+      if (result.success) {
+        navigate(`/${role}/dashboard`);
+      } else {
+        setError(result.message);
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const getRoleLabel = () => {
-    switch(role) {
-      case 'faculty': return 'Faculty';
-      case 'student': return 'Student';
-      default: return 'User';
+    switch (role) {
+      case "faculty":
+        return "Faculty";
+      case "student":
+        return "Student";
+      default:
+        return "User";
     }
   };
 
   return (
-    <AuthLayout 
-      title={`Create ${getRoleLabel()} Account`} 
-      subtitle={`Join SPMS as a ${role}.`}
+    <AuthLayout
+      title={`${getRoleLabel()} Registration`}
+      subtitle={`Create your ${role} account to get started.`}
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {error && (
+          <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg">
+            <p className="text-sm">{error}</p>
+          </div>
+        )}
+
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">
+          <label className="block text-sm font-medium text-gray-400 mb-2">
             Full Name
           </label>
           <input
             type="text"
             name="name"
             required
-            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            disabled={loading}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
             placeholder="Enter your full name"
             value={formData.name}
             onChange={handleChange}
@@ -62,29 +118,65 @@ const RegisterPage = ({ role }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">
+          <label className="block text-sm font-medium text-gray-400 mb-2">
             Email Address
           </label>
           <input
             type="email"
             name="email"
             required
-            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder={`Enter your ${role} email`}
+            disabled={loading}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">
+          <label className="block text-sm font-medium text-gray-400 mb-2">
+            Department
+          </label>
+          <input
+            type="text"
+            name="department"
+            required
+            disabled={loading}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+            placeholder="e.g., Computer Science, Electrical Engineering"
+            value={formData.department}
+            onChange={handleChange}
+          />
+        </div>
+
+        {role === "student" && (
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Roll Number
+            </label>
+            <input
+              type="text"
+              name="rollNumber"
+              required
+              disabled={loading}
+              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+              placeholder="Enter your roll number"
+              value={formData.rollNumber}
+              onChange={handleChange}
+            />
+          </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-medium text-gray-400 mb-2">
             Password
           </label>
           <input
             type="password"
             name="password"
             required
-            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            disabled={loading}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
             placeholder="Create a password"
             value={formData.password}
             onChange={handleChange}
@@ -92,14 +184,15 @@ const RegisterPage = ({ role }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">
+          <label className="block text-sm font-medium text-gray-400 mb-2">
             Confirm Password
           </label>
           <input
             type="password"
             name="confirmPassword"
             required
-            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            disabled={loading}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
             placeholder="Confirm your password"
             value={formData.confirmPassword}
             onChange={handleChange}
@@ -108,28 +201,29 @@ const RegisterPage = ({ role }) => {
 
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 mt-2"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Register
+          {loading ? "Creating Account..." : "Register"}
         </button>
 
         <div className="flex items-center justify-between mt-4">
-             <Link 
-              to="/login"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              ← Back to Role Selection
-            </Link>
+          <Link
+            to="/login"
+            className="text-sm text-gray-400 hover:text-white transition-colors"
+          >
+            ← Back to Role Selection
+          </Link>
 
-            <span className="text-sm text-gray-400">
-              Already have an account?{" "}
-              <Link 
-                to={`/${role}/login`}
-                className="text-green-400 hover:text-green-300 font-medium"
-              >
-                Login
-              </Link>
-            </span>
+          <span className="text-sm text-gray-400">
+            Already have an account?{" "}
+            <Link
+              to={`/${role}/login`}
+              className="text-blue-400 hover:text-blue-300 font-medium"
+            >
+              Login
+            </Link>
+          </span>
         </div>
       </form>
     </AuthLayout>

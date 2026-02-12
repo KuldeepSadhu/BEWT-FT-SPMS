@@ -1,55 +1,85 @@
-/**
- * Authentication utility functions
- */
+import api from "./api";
 
-// Valid roles in the system
-export const VALID_ROLES = ["admin", "faculty", "student"];
+// Login function
+export const login = async (email, password, role) => {
+  try {
+    const response = await api.post("/auth/login", {
+      email,
+      password,
+      role,
+    });
 
-/**
- * Validates if a role is valid
- * @param {string} role - The role to validate
- * @returns {boolean} - True if role is valid, false otherwise
- */
-export const isValidRole = (role) => {
-  return role && VALID_ROLES.includes(role);
+    const { token, user } = response.data;
+
+    // Store token and user
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    return { success: true, user };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Login failed",
+    };
+  }
 };
 
-/**
- * Gets and validates the user role from localStorage
- * Clears invalid roles automatically
- * @returns {string|null} - Valid role or null
- */
+// Register function
+export const register = async (
+  name,
+  email,
+  password,
+  role,
+  additionalData = {},
+) => {
+  try {
+    const response = await api.post("/auth/register", {
+      name,
+      email,
+      password,
+      role,
+      ...additionalData,
+    });
+
+    const { token, user } = response.data;
+
+    // Store token and user
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    return { success: true, user };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Registration failed",
+    };
+  }
+};
+
+// Logout function
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+};
+
+// Get current user
+export const getCurrentUser = () => {
+  const user = localStorage.getItem("user");
+  try {
+    return user ? JSON.parse(user) : null;
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+    return null;
+  }
+};
+
+// Check if authenticated
+export const isAuthenticated = () => {
+  return !!localStorage.getItem("token");
+};
+
+// Get user role
 export const getUserRole = () => {
-  const role = localStorage.getItem("role");
-  
-  if (isValidRole(role)) {
-    return role;
-  }
-  
-  // Clear invalid role from localStorage
-  if (role) {
-    localStorage.removeItem("role");
-  }
-  
-  return null;
-};
-
-/**
- * Sets the user role in localStorage (with validation)
- * @param {string} role - The role to set
- * @returns {boolean} - True if role was set successfully, false if invalid
- */
-export const setUserRole = (role) => {
-  if (isValidRole(role)) {
-    localStorage.setItem("role", role);
-    return true;
-  }
-  return false;
-};
-
-/**
- * Clears the user role from localStorage
- */
-export const clearUserRole = () => {
-  localStorage.removeItem("role");
+  const user = getCurrentUser();
+  return user?.role || null;
 };

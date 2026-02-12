@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { 
-  FiHome, 
-  FiUsers, 
-  FiFolder, 
-  FiFileText, 
-  FiLogOut, 
-  FiMenu, 
+import {
+  FiHome,
+  FiUsers,
+  FiFolder,
+  FiFileText,
+  FiLogOut,
+  FiMenu,
   FiX,
   FiCalendar,
   FiCheckCircle,
-  FiBarChart
+  FiBarChart,
 } from "react-icons/fi";
-import { clearUserRole } from "../../utils/auth";
+import { logout } from "../../utils/auth";
 
 const FacultyNavbar = () => {
   const navigate = useNavigate();
@@ -20,28 +20,57 @@ const FacultyNavbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = () => {
-    clearUserRole();
+    logout();
     navigate("/login");
   };
 
   const menuItems = [
     { icon: FiHome, label: "Dashboard", path: "/faculty/dashboard" },
     { icon: FiUsers, label: "Mentored Groups", path: "/faculty/groups" },
-    { icon: FiCalendar, label: "Meeting Schedule", path: "/faculty/meetings/schedule" },
-    { icon: FiCalendar, label: "Meeting Entry", path: "/faculty/meetings/entry" },
-    { icon: FiCheckCircle, label: "Attendance", path: "/faculty/meetings/attendance" },
-    { icon: FiFileText, label: "Proposal Review", path: "/faculty/projects/proposals" },
-    { icon: FiFolder, label: "Project Progress", path: "/faculty/projects/progress" },
+    {
+      icon: FiCalendar,
+      label: "Meeting Schedule",
+      path: "/faculty/meetings/schedule",
+    },
+    {
+      icon: FiCalendar,
+      label: "Meeting Entry",
+      path: "/faculty/meetings/entry",
+    },
+    {
+      icon: FiCheckCircle,
+      label: "Attendance",
+      path: "/faculty/meetings/attendance",
+    },
+    {
+      icon: FiFileText,
+      label: "Proposal Review",
+      path: "/faculty/projects/proposals",
+    },
+    {
+      icon: FiFolder,
+      label: "Project Progress",
+      path: "/faculty/projects/progress",
+    },
     { icon: FiFolder, label: "Project Files", path: "/faculty/projects/files" },
-    { icon: FiCheckCircle, label: "Evaluation", path: "/faculty/projects/evaluation" },
-    { icon: FiBarChart, label: "Group Performance", path: "/faculty/reports/performance" },
+    {
+      icon: FiCheckCircle,
+      label: "Evaluation",
+      path: "/faculty/projects/evaluation",
+    },
+    {
+      icon: FiBarChart,
+      label: "Group Performance",
+      path: "/faculty/reports/performance",
+    },
     { icon: FiBarChart, label: "Marks Report", path: "/faculty/reports/marks" },
   ];
 
   const isActive = (path) => {
     if (location.pathname === path) return true;
     // Check if current path starts with the menu path (for sub-routes)
-    if (path !== "/faculty/dashboard" && location.pathname.startsWith(path)) return true;
+    if (path !== "/faculty/dashboard" && location.pathname.startsWith(path))
+      return true;
     return false;
   };
 

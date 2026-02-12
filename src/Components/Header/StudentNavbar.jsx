@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { 
-  FiHome, 
-  FiUsers, 
-  FiFolder, 
-  FiUser, 
-  FiLogOut, 
-  FiMenu, 
+import {
+  FiHome,
+  FiUsers,
+  FiFolder,
+  FiUser,
+  FiLogOut,
+  FiMenu,
   FiX,
   FiCalendar,
   FiFileText,
-  FiDownload
+  FiDownload,
 } from "react-icons/fi";
-import { clearUserRole } from "../../utils/auth";
+import { logout } from "../../utils/auth";
 
 const StudentNavbar = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const StudentNavbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    clearUserRole();
+    logout();
     navigate("/login");
   };
 
@@ -28,10 +28,26 @@ const StudentNavbar = () => {
     { icon: FiHome, label: "Dashboard", path: "/student/dashboard" },
     { icon: FiUsers, label: "My Group", path: "/student/group/my-group" },
     { icon: FiFolder, label: "My Project", path: "/student/project" },
-    { icon: FiFileText, label: "Project Details", path: "/student/projects/details" },
-    { icon: FiFileText, label: "Submit Proposal", path: "/student/projects/proposal" },
-    { icon: FiCalendar, label: "Meeting Schedule", path: "/student/meetings/schedule" },
-    { icon: FiCalendar, label: "Meeting History", path: "/student/meetings/history" },
+    {
+      icon: FiFileText,
+      label: "Project Details",
+      path: "/student/projects/details",
+    },
+    {
+      icon: FiFileText,
+      label: "Submit Proposal",
+      path: "/student/projects/proposal",
+    },
+    {
+      icon: FiCalendar,
+      label: "Meeting Schedule",
+      path: "/student/meetings/schedule",
+    },
+    {
+      icon: FiCalendar,
+      label: "Meeting History",
+      path: "/student/meetings/history",
+    },
     { icon: FiDownload, label: "Reports", path: "/student/reports/progress" },
     { icon: FiUser, label: "Profile", path: "/student/profile" },
   ];
@@ -39,7 +55,8 @@ const StudentNavbar = () => {
   const isActive = (path) => {
     if (location.pathname === path) return true;
     // Check if current path starts with the menu path (for sub-routes)
-    if (path !== "/student/dashboard" && location.pathname.startsWith(path)) return true;
+    if (path !== "/student/dashboard" && location.pathname.startsWith(path))
+      return true;
     return false;
   };
 
@@ -50,7 +67,9 @@ const StudentNavbar = () => {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold">SPMS</h1>
-            <span className="text-indigo-300 text-sm hidden sm:inline">Student Portal</span>
+            <span className="text-indigo-300 text-sm hidden sm:inline">
+              Student Portal
+            </span>
           </div>
 
           {/* Desktop Menu */}

@@ -1,21 +1,28 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { getUserRole, isValidRole } from "../utils/auth";
+import { isAuthenticated, getUserRole } from "../utils/auth";
 
 const ProtectedRoute = ({ allowedRole }) => {
+  const isAuth = isAuthenticated();
   const userRole = getUserRole();
 
-  // If no valid role, redirect to login
-  if (!userRole) {
+  // Not authenticated - redirect to login
+  if (!isAuth) {
     return <Navigate to="/login" replace />;
   }
 
-  // If role doesn't match allowed role, redirect to login
+  // Authenticated but wrong role - redirect to their dashboard
   if (userRole !== allowedRole) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={`/${userRole}/dashboard`} replace />;
   }
 
+  // Authenticated and correct role - render the route
   return <Outlet />;
 };
 
 export default ProtectedRoute;
+
+
+// ## 6. Create `.env` file in `frontend/` root (NEW FILE)
+
+// VITE_API_URL=http://localhost:5000/api
